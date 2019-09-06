@@ -91,11 +91,11 @@ type SagaBoilerplate<
 export const concoctBoilerplate = <
   A extends SideEffectRecord,
   B extends ActionTypes<A>,
-  C
+  C = {}
 >(
   sideEffects: A,
   actionTypes: B,
-  defaultState: C
+  defaultState?: C
 ): SagaBoilerplate<A, B> => {
   const keys = Object.keys(sideEffects) as ReadonlyArray<keyof A>;
 
