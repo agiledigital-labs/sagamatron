@@ -3,6 +3,7 @@
 [![npm](https://img.shields.io/npm/v/sagamatron.svg)](https://www.npmjs.com/package/sagamatron)
 [![CircleCI](https://circleci.com/gh/agiledigital/sagamatron.svg?style=svg)](https://circleci.com/gh/agiledigital/sagamatron)
 [![Known Vulnerabilities](https://snyk.io//test/github/agiledigital/sagamatron/badge.svg?targetFile=package.json)](https://snyk.io//test/github/agiledigital/sagamatron?targetFile=package.json)
+[![type-coverage](https://img.shields.io/badge/dynamic/json.svg?label=type-coverage&prefix=%E2%89%A5&suffix=%&query=$.typeCoverage.atLeast&uri=https%3A%2F%2Fraw.githubusercontent.com%2Fagiledigital%2Fsagamatron%2Fmaster%2Fpackage.json)](https://github.com/plantain-00/type-coverage)
 
 Take the boilerplate out of your React/Redux/Saga stack using the magic of TypeScript! 🧙
 
