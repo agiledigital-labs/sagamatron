@@ -1,11 +1,38 @@
 {
-  "name": "saga-boilerplate",
+  "name": "sagamatron",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "lint": "tslint -p tsconfig.json -c tslint.json",
+    "type-coverage": "type-coverage --strict --detail --ignore-catch",
+    "format": "prettier --write '{src,test}/**/*.{ts,tsx}'",
+    "test": "jest"
+  },
   "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2",
     "redux": "^4.0.4",
     "redux-saga": "^1.0.5",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.19.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-immutable": "^6.0.1",
+    "tslint-sonarts": "^1.9.0",
+    "type-coverage": "^2.2.0",
     "typescript": "^3.6.2"
+  },
+  "typeCoverage": {
+    "atLeast": 100
+  },
+  "dependencies": {
+    "flux-standard-action": "^2.1.1"
+  },
+  "peerDependencies": {
+    "redux": "^4.0.4",
+    "redux-saga": "^1.0.5"
   }
 }
