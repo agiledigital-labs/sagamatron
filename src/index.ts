@@ -11,6 +11,7 @@ type ReadonlyRecord<K extends string, T> = {
 };
 
 // TODO: better error type?
+// TODO: support non-promise return types
 type SideEffectRecord = ReadonlyRecord<string, (...args: unknown[]) => Promise<unknown>>;
 
 type ActionTypes<A extends SideEffectRecord> = {
