@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "tslint -p tsconfig.json -c tslint.json",
+    "format-check": "prettier-check src/**/*",
     "type-coverage": "type-coverage --strict --detail --ignore-catch",
     "format": "prettier --write '{src,test}/**/*.{ts,tsx}'",
     "test": "jest",
@@ -15,6 +16,7 @@
     "@types/jest": "^24.0.18",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
+    "prettier-check": "^2.0.0",
     "redux": "^4.0.4",
     "redux-saga": "^1.0.5",
     "ts-jest": "^24.0.2",
