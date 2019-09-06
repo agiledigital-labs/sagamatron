@@ -39,42 +39,50 @@ type SideEffectAction<
   };
 };
 
-type SagaActions<
+type ExtractResult<A extends () => unknown> = ReturnType<A> extends Promise<
+  infer Result
+>
+  ? Result
+  : ReturnType<A>;
+
+type SagaActionsArray<
+  P extends keyof A,
+  A extends SideEffectRecord<unknown>,
+  B extends ActionTypes<A>,
+  ErrorType extends unknown = Error
+> = readonly [
+  // PERFORM SIDE EFFECT (e.g. GET)
+  (...params: Parameters<A[P]>) => SideEffectAction<A, B, P>,
+  // PERFORM SIDE EFFECT SUCCESS (e.g. GET SUCCESS)
+  (
+    result: ExtractResult<A[P]>
+  ) => {
+    readonly type: B[P][1];
+    readonly payload: {
+      readonly result: ExtractResult<A[P]>;
+    };
+  },
+  // PERFORM SIDE EFFECT FAILURE (e.g. GET FAILURE)
+  (
+    error: ErrorType
+  ) => {
+    readonly type: B[P][2];
+    readonly payload: {
+      readonly error: ErrorType;
+    };
+    readonly error: true;
+  },
+  // TODO: better types for the reducer
+  Reducer<object, Action>,
+  (action: SideEffectAction<A, B, P>) => SagaIterator<void>
+];
+
+type SagaActionsRecord<
   A extends SideEffectRecord<unknown>,
   B extends ActionTypes<A>,
   ErrorType extends unknown = Error
 > = {
-  readonly [P in keyof A]: readonly [
-    // PERFORM SIDE EFFECT (e.g. GET)
-    (...params: Parameters<A[P]>) => SideEffectAction<A, B, P>,
-    // PERFORM SIDE EFFECT SUCCESS (e.g. GET SUCCESS)
-    (
-      result: ReturnType<A[P]> extends Promise<infer Result>
-        ? Result
-        : ReturnType<A[P]>
-    ) => {
-      readonly type: B[P][1];
-      readonly payload: {
-        // TODO: don't repeat this incantation
-        readonly result: ReturnType<A[P]> extends Promise<infer Result>
-          ? Result
-          : ReturnType<A[P]>;
-      };
-    },
-    // PERFORM SIDE EFFECT FAILURE (e.g. GET FAILURE)
-    (
-      error: ErrorType
-    ) => {
-      readonly type: B[P][2];
-      readonly payload: {
-        readonly error: ErrorType;
-      };
-      readonly error: true;
-    },
-    // TODO: better types for the reducer
-    Reducer<object, Action>,
-    (action: SideEffectAction<A, B, P>) => SagaIterator<void>
-  ];
+  readonly [P in keyof A]: SagaActionsArray<P, A, B, ErrorType>;
 };
 
 type SagaBoilerplate<
@@ -82,7 +90,7 @@ type SagaBoilerplate<
   B extends ActionTypes<A>,
   ErrorType extends unknown = Error
 > = {
-  readonly actions: SagaActions<A, B, ErrorType>;
+  readonly actions: SagaActionsRecord<A, B, ErrorType>;
   // TODO: better types for the reducer
   readonly rootReducer: ReducersMapObject;
   readonly rootSaga: () => SagaIterator<void>;
@@ -166,11 +174,7 @@ export const concoctBoilerplate = <
           }
         }),
         // PERFORM SIDE EFFECT SUCCESS (e.g. GET SUCCESS)
-        (
-          result: ReturnType<A[typeof k]> extends Promise<infer Result>
-            ? Result
-            : ReturnType<A[typeof k]>
-        ) => ({
+        (result: ExtractResult<A[typeof k]>) => ({
           type: actionTypes[k][1],
           payload: {
             result
@@ -189,7 +193,7 @@ export const concoctBoilerplate = <
       ]
     };
     // TODO get rid of this cast
-  }, {}) as SagaActions<A, B>;
+  }, {}) as SagaActionsRecord<A, B>;
 
   const rootReducer: ReducersMapObject = keys.reduce(
     (acc, k) => ({
