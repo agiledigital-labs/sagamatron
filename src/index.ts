@@ -6,6 +6,8 @@
 // TODO: entertaining readme, ad hominem attacks against hook heathens
 // TODO: tests
 
+import { Reducer, Action } from "redux";
+
 type ReadonlyRecord<K extends string, T> = {
   readonly [P in K]: T;
 };
@@ -41,7 +43,7 @@ type SagaBoilerplate<A extends SideEffectRecord, B extends ActionTypes<A>, Error
       readonly error: ErrorType
     },
     // TODO Reducer,
-    (action: any, state: any) => any,
+    Reducer,
     // TODO Saga,
     () => undefined
   ]
@@ -77,7 +79,7 @@ export const concoctBoilerplate = <A extends SideEffectRecord, B extends ActionT
         error
       }),
       // TODO Reducer,
-      (action: {readonly type: string, readonly payload?: any, readonly error?: any}, state: any) => {
+      (action: Action<string> & { readonly payload?: any, readonly error?: any }, state: any) => {
         switch (action.type) {
           case actionTypes[k][0]:
             return {
