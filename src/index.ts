@@ -2,6 +2,8 @@ import { FluxStandardAction } from "flux-standard-action";
 import { Reducer } from "redux";
 import { call, Effect, put } from "redux-saga/effects";
 
+// tslint:disable: object-literal-sort-keys
+
 type ReadonlyRecord<K extends string, T> = {
   readonly [P in K]: T;
 };
@@ -77,16 +79,18 @@ type SagaBoilerplate<
 
 export const concoctBoilerplate = <
   A extends SideEffectRecord,
-  B extends ActionTypes<A>
+  B extends ActionTypes<A>,
+  C
 >(
   sideEffects: A,
-  actionTypes: B
+  actionTypes: B,
+  defaultState: C
 ): SagaBoilerplate<A, B> => {
   // TODO: return an overall reducer and saga for all side effects in `sideEffects`.
   const keys = Object.keys(sideEffects) as ReadonlyArray<keyof A>;
 
   return keys.reduce((acc, k) => {
-    const reducer = (state: object, action: Action) => {
+    const reducer = (state: C | undefined = defaultState, action: Action) => {
       switch (action.type) {
         case actionTypes[k][0]:
           return {

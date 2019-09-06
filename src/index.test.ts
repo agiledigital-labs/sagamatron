@@ -35,7 +35,7 @@ it("concocts boilerplate", async () => {
   const {
     get: [getUser, , , getUserReducer, getUserSaga],
     syncGet: [getSyncUser, , , getSyncUserReducer, getSyncUserSaga]
-  } = concoctBoilerplate(userApi, actionTypes);
+  } = concoctBoilerplate(userApi, actionTypes, {});
 
   const action = getUser("42");
   const syncAction = getSyncUser("42");
