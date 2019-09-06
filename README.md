@@ -1,5 +1,7 @@
 # SAGAMATRON
 
+[![npm](https://img.shields.io/npm/v/sagamatron.svg)](https://www.npmjs.com/package/sagamatron)
+
 Take the boilerplate out of your React/Redux/Saga stack using the magic of TypeScript! 🧙
 
 ![SAGAMATRON converting side effects into happiness](docs/logo.png "SAGAMATRON Logo")
