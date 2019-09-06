@@ -14,8 +14,7 @@ type ReadonlyRecord<K extends string, T> = {
 };
 
 // TODO: better error type?
-// TODO: support non-promise return types
-type SideEffectRecord = ReadonlyRecord<string, (...args: unknown[]) => Promise<unknown>>;
+type SideEffectRecord = ReadonlyRecord<string, (...args: unknown[]) => unknown | Promise<unknown>>;
 
 type ActionTypes<A extends SideEffectRecord> = {
   readonly [P in keyof A]: readonly [string, string, string];
@@ -33,11 +32,11 @@ type SagaBoilerplate<A extends SideEffectRecord, B extends ActionTypes<A>, Error
       }
     },
     // PERFORM SIDE EFFECT SUCCESS (e.g. GET SUCCESS)
-    (result: ReturnType<A[P]> extends Promise<infer Result> ? Result : never) => {
+    (result: ReturnType<A[P]> extends Promise<infer Result> ? Result : ReturnType<A[typeof k]>) => {
       readonly type: B[P][1],
       readonly payload: {
         // TODO: don't repeat this incantation
-        readonly result: ReturnType<A[P]> extends Promise<infer Result> ? Result : never
+        readonly result: ReturnType<A[P]> extends Promise<infer Result> ? Result : ReturnType<A[typeof k]>
       }
     },
     // PERFORM SIDE EFFECT FAILURE (e.g. GET FAILURE)
@@ -90,7 +89,7 @@ export const concoctBoilerplate = <A extends SideEffectRecord, B extends ActionT
     function* saga (...params: Parameters<A[typeof k]>) {
       try {
         const result = yield call(sideEffects[k], ...params);
-  
+
         yield put({
           payload: {
             result
@@ -116,7 +115,7 @@ export const concoctBoilerplate = <A extends SideEffectRecord, B extends ActionT
         }
       }),
       // PERFORM SIDE EFFECT SUCCESS (e.g. GET SUCCESS)
-      (result: ReturnType<A[typeof k]> extends Promise<infer Result> ? Result : never) => ({
+      (result: ReturnType<A[typeof k]> extends Promise<infer Result> ? Result : ReturnType<A[typeof k]>) => ({
         type: actionTypes[k][1],
         payload: {
           result
