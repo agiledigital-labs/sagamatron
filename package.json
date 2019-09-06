@@ -1,0 +1,11 @@
+{
+  "name": "saga-boilerplate",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "redux": "^4.0.4",
+    "redux-saga": "^1.0.5",
+    "typescript": "^3.6.2"
+  }
+}
