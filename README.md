@@ -46,4 +46,4 @@ of TypeScript to reduce the boilerplate of redux and redux-saga.
 
 ## Example
 
-We are still working on the types but expect this to be updated by the end of the day with some concrete examples. 🤗
+See https://github.com/agiledigital/sagamatron/blob/master/src/index.test.ts#L7
