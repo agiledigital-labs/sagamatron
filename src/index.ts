@@ -76,21 +76,21 @@ export const concoctBoilerplate = <A extends SideEffectRecord, B extends ActionT
         error
       }),
       // TODO Reducer,
-      (action: any, state: any) => {
+      (action: {readonly type: string, readonly payload?: any, readonly error?: any}, state: any) => {
         switch (action.type) {
-          case actionTypes[0]:
+          case actionTypes[k][0]:
             return {
               ...state,
               loading: true
             };
-          case actionTypes[1]:
+          case actionTypes[k][1]:
             return {
               ...state,
               loading: false,
               result: action.payload.result,
               error: undefined
             };
-          case actionTypes[2]:
+          case actionTypes[k][2]:
             return {
               ...state,
               loading: false,
