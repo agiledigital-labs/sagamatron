@@ -32,11 +32,11 @@ type SagaBoilerplate<A extends SideEffectRecord, B extends ActionTypes<A>, Error
       }
     },
     // PERFORM SIDE EFFECT SUCCESS (e.g. GET SUCCESS)
-    (result: ReturnType<A[P]> extends Promise<infer Result> ? Result : ReturnType<A[typeof k]>) => {
+    (result: ReturnType<A[P]> extends Promise<infer Result> ? Result : ReturnType<A[P]>) => {
       readonly type: B[P][1],
       readonly payload: {
         // TODO: don't repeat this incantation
-        readonly result: ReturnType<A[P]> extends Promise<infer Result> ? Result : ReturnType<A[typeof k]>
+        readonly result: ReturnType<A[P]> extends Promise<infer Result> ? Result : ReturnType<A[P]>
       }
     },
     // PERFORM SIDE EFFECT FAILURE (e.g. GET FAILURE)
