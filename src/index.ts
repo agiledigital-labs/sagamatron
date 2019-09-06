@@ -40,7 +40,9 @@ type SagaBoilerplate<A extends SideEffectRecord, B extends ActionTypes<A>, Error
       readonly error: ErrorType
     },
     // TODO Reducer,
+    (action: any, state: any) => any,
     // TODO Saga,
+    () => undefined
   ]
 };
 
@@ -49,8 +51,60 @@ export const concoctBoilerplate = <A extends SideEffectRecord, B extends ActionT
   actionTypes: B
 ): SagaBoilerplate<A, B> => {
 
-  // TODO: actually implement
-  throw new Error("Not implemented")
+  const keys = Object.keys(sideEffects) as ReadonlyArray<keyof A>;
+
+  return keys.reduce((acc, k) => ({
+    ...acc,
+    [k]: [
+      // PERFORM SIDE EFFECT (e.g. GET)
+      (...params: Parameters<A[typeof k]>) => ({
+        type: actionTypes[0],
+        payload: {
+          params
+        }
+      }),
+      // PERFORM SIDE EFFECT SUCCESS (e.g. GET SUCCESS)
+      (result: ReturnType<A[typeof k]> extends Promise<infer Result> ? Result : never) => ({
+        type: actionTypes[1],
+        payload: {
+          result
+        }
+      }),
+      // PERFORM SIDE EFFECT FAILURE (e.g. GET FAILURE)
+      (error: unknown) => ({
+        type: actionTypes[2],
+        error
+      }),
+      // TODO Reducer,
+      (action: any, state: any) => {
+        switch (action.type) {
+          case actionTypes[0]:
+            return {
+              ...state,
+              loading: true
+            };
+          case actionTypes[1]:
+            return {
+              ...state,
+              loading: false,
+              result: action.payload.result,
+              error: undefined
+            };
+          case actionTypes[2]:
+            return {
+              ...state,
+              loading: false,
+              result: undefined,
+              error: action.error
+            };
+          default:
+            return state;
+        }
+      },
+      // TODO Saga,
+      () => undefined
+    ]
+  }), {}) as SagaBoilerplate<A, B>;
 }
 
 type User = {readonly id: string, readonly username: string};
@@ -71,6 +125,6 @@ const actionTypes = {
   get: ["GET_USER", "GET_USER_SUCCESS", "GET_USER_FAILURE"]
 } as const;
 
-const {get: [getUser, getUserSuccess, getUserFailure]} = concoctBoilerplate(userApi, actionTypes);
+const {get: [getUser, getUserSuccess, getUserFailure, reducer, saga]} = concoctBoilerplate(userApi, actionTypes);
 
-dispatch(getUser("42"))
+// dispatch(getUser("42"))
