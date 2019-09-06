@@ -1,5 +1,3 @@
-import { ReducersMapObject } from "redux";
-import { all, takeLatest } from "redux-saga/effects";
 import { concoctBoilerplate } from ".";
 
 // tslint:disable: no-expression-statement
@@ -28,33 +26,29 @@ it("concocts boilerplate", async () => {
   };
 
   const actionTypes = {
-    get: ["GET_USER", "GET_USER_SUCCESS", "GET_USER_FAILURE"],
-    syncGet: ["SYNC_GET_USER", "SYNC_GET_USER_SUCCESS", "SYNC_GET_USER_FAILURE"]
+    get: ["GET_USER", "GET_USER_SUCCESS", "GET_USER_FAILURE", "user"],
+    syncGet: [
+      "SYNC_GET_USER",
+      "SYNC_GET_USER_SUCCESS",
+      "SYNC_GET_USER_FAILURE",
+      "syncUser"
+    ]
   } as const;
 
   const {
-    get: [getUser, , , getUserReducer, getUserSaga],
-    syncGet: [getSyncUser, , , getSyncUserReducer, getSyncUserSaga]
+    actions: {
+      get: [getUser],
+      syncGet: [getSyncUser]
+    },
+    rootReducer,
+    rootSaga
   } = concoctBoilerplate(userApi, actionTypes, {});
 
   const action = getUser("42");
   const syncAction = getSyncUser("42");
 
-  // TODO move this boilerplate into concoctBoilerplate
-  const allReducers = (): ReducersMapObject => ({
-    user: getUserReducer,
-    syncUser: getSyncUserReducer
-  });
-
-  function* rootSaga(): IterableIterator<unknown> {
-    // TODO move this boilerplate into concoctBoilerplate
-    yield all([
-      takeLatest("GET_USER", getUserSaga),
-      takeLatest("SYNC_GET_USER", getSyncUserSaga)
-    ]);
-  }
-
-  allReducers();
+  expect(rootReducer.user).toBeDefined();
+  expect(rootReducer.syncUser).toBeDefined();
   rootSaga();
 
   expect(action).toEqual({

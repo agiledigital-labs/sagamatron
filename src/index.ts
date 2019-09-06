@@ -1,6 +1,6 @@
 import { FluxStandardAction } from "flux-standard-action";
-import { Reducer } from "redux";
-import { call, Effect, put } from "redux-saga/effects";
+import { Reducer, ReducersMapObject } from "redux";
+import { all, call, Effect, put, takeLatest } from "redux-saga/effects";
 
 // tslint:disable: object-literal-sort-keys
 
@@ -17,7 +17,7 @@ type SideEffectRecord<A = any> = ReadonlyRecord<
 >;
 
 type ActionTypes<A extends SideEffectRecord<unknown>> = {
-  readonly [P in keyof A]: readonly [string, string, string];
+  readonly [P in keyof A]: readonly [string, string, string, string];
 };
 
 export type SagaIterator<RT> = Generator<Effect<unknown>, RT, unknown>;
@@ -39,7 +39,7 @@ type SideEffectAction<
   };
 };
 
-type SagaBoilerplate<
+type SagaActions<
   A extends SideEffectRecord<unknown>,
   B extends ActionTypes<A>,
   ErrorType extends unknown = Error
@@ -77,6 +77,17 @@ type SagaBoilerplate<
   ];
 };
 
+type SagaBoilerplate<
+  A extends SideEffectRecord<unknown>,
+  B extends ActionTypes<A>,
+  ErrorType extends unknown = Error
+> = {
+  readonly actions: SagaActions<A, B, ErrorType>;
+  // TODO: better types for the reducer
+  readonly rootReducer: ReducersMapObject;
+  readonly rootSaga: () => SagaIterator<void>;
+};
+
 export const concoctBoilerplate = <
   A extends SideEffectRecord,
   B extends ActionTypes<A>,
@@ -86,10 +97,10 @@ export const concoctBoilerplate = <
   actionTypes: B,
   defaultState: C
 ): SagaBoilerplate<A, B> => {
-  // TODO: return an overall reducer and saga for all side effects in `sideEffects`.
   const keys = Object.keys(sideEffects) as ReadonlyArray<keyof A>;
 
-  return keys.reduce((acc, k) => {
+  const actions = keys.reduce((acc, k) => {
+    // tslint:disable-next-line: one-variable-per-declaration
     const reducer = (state: C | undefined = defaultState, action: Action) => {
       switch (action.type) {
         case actionTypes[k][0]:
@@ -177,5 +188,24 @@ export const concoctBoilerplate = <
       ]
     };
     // TODO get rid of this cast
-  }, {}) as SagaBoilerplate<A, B>;
+  }, {}) as SagaActions<A, B>;
+
+  const rootReducer: ReducersMapObject = keys.reduce(
+    (acc, k) => ({
+      ...acc,
+      [actionTypes[k][3]]: actions[k][3]
+    }),
+    {}
+  );
+
+  function* rootSaga(): SagaIterator<void> {
+    // tslint:disable-next-line: no-expression-statement
+    yield all(keys.map(k => takeLatest(actionTypes[k][0], actions[k][4])));
+  }
+
+  return {
+    actions,
+    rootReducer,
+    rootSaga
+  };
 };
