@@ -200,7 +200,7 @@ export const concoctBoilerplate = <
   );
 
   function* rootSaga(): SagaIterator<void> {
-    // tslint:disable-next-line: no-expression-statement
+    // tslint:disable-next-line: no-expression-statement no-unsafe-any
     yield all(keys.map(k => takeLatest(actionTypes[k][0], actions[k][4])));
   }
 
