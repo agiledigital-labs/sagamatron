@@ -4,7 +4,7 @@
 
 Take the boilerplate out of your React/Redux/Saga stack using the magic of TypeScript! 🧙
 
-![SAGAMATRON converting side effects into happiness](docs/logo.png "SAGAMATRON Logo")
+![SAGAMATRON converting side effects into happiness](https://raw.githubusercontent.com/agiledigital/sagamatron/master/docs/logo.png "SAGAMATRON Logo")
 
 ## Summary
 
