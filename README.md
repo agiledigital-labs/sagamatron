@@ -2,6 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/sagamatron.svg)](https://www.npmjs.com/package/sagamatron)
 [![CircleCI](https://circleci.com/gh/agiledigital/sagamatron.svg?style=svg)](https://circleci.com/gh/agiledigital/sagamatron)
+[![Known Vulnerabilities](https://snyk.io//test/github/agiledigital/sagamatron/badge.svg?targetFile=package.json)](https://snyk.io//test/github/agiledigital/sagamatron?targetFile=package.json)
 
 Take the boilerplate out of your React/Redux/Saga stack using the magic of TypeScript! 🧙
 
