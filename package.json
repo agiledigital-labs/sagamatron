@@ -1,7 +1,7 @@
 {
   "name": "sagamatron",
   "version": "2.0.0",
-  "main": "dist/index.js",
+  "main": "dist",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
