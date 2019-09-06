@@ -46,4 +46,6 @@ of TypeScript to reduce the boilerplate of redux and redux-saga.
 
 ## Example
 
-See https://github.com/agiledigital/sagamatron/blob/master/src/index.test.ts#L7
+The unit tests are a good example of how it all works: https://github.com/agiledigital/sagamatron/blob/master/src/index.test.ts#L7
+
+We also have a basic project that demonstrates how sagamatron integrates with everything: https://github.com/agiledigital/react-redux-saga-sagamatron
