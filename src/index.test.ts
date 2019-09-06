@@ -42,7 +42,7 @@ it("concocts boilerplate", async () => {
     },
     rootReducer,
     rootSaga
-  } = concoctBoilerplate(userApi, actionTypes, {});
+  } = concoctBoilerplate(userApi, actionTypes);
 
   const action = getUser("42");
   const syncAction = getSyncUser("42");
