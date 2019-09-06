@@ -58,21 +58,21 @@ export const concoctBoilerplate = <A extends SideEffectRecord, B extends ActionT
     [k]: [
       // PERFORM SIDE EFFECT (e.g. GET)
       (...params: Parameters<A[typeof k]>) => ({
-        type: actionTypes[0],
+        type: actionTypes[k][0],
         payload: {
           params
         }
       }),
       // PERFORM SIDE EFFECT SUCCESS (e.g. GET SUCCESS)
       (result: ReturnType<A[typeof k]> extends Promise<infer Result> ? Result : never) => ({
-        type: actionTypes[1],
+        type: actionTypes[k][1],
         payload: {
           result
         }
       }),
       // PERFORM SIDE EFFECT FAILURE (e.g. GET FAILURE)
       (error: unknown) => ({
-        type: actionTypes[2],
+        type: actionTypes[k][2],
         error
       }),
       // TODO Reducer,
