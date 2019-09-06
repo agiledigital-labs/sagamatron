@@ -134,10 +134,11 @@ export const concoctBoilerplate = <
     ): SagaIterator<void> {
       // tslint:disable-next-line: no-try
       try {
+        // TODO: https://github.com/agiledigital/typed-redux-saga
         const result = yield call(sideEffects[k], ...action.payload.params);
 
         // tslint:disable-next-line: no-expression-statement
-        yield put({
+        yield put<Action>({
           type: actionTypes[k][1],
           payload: {
             result
@@ -145,7 +146,7 @@ export const concoctBoilerplate = <
         });
       } catch (error) {
         // tslint:disable-next-line: no-expression-statement
-        yield put({
+        yield put<Action>({
           type: actionTypes[k][2],
           payload: {
             error
