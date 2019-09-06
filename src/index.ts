@@ -7,6 +7,7 @@
 // TODO: tests
 
 import { Reducer, Action } from "redux";
+import { Effect, call, put } from "redux-saga/effects";
 
 type ReadonlyRecord<K extends string, T> = {
   readonly [P in K]: T;
@@ -19,6 +20,8 @@ type SideEffectRecord = ReadonlyRecord<string, (...args: unknown[]) => Promise<u
 type ActionTypes<A extends SideEffectRecord> = {
   readonly [P in keyof A]: readonly [string, string, string];
 };
+
+export type SagaIterator<RT> = Generator<Effect<unknown>, RT, unknown>;
 
 type SagaBoilerplate<A extends SideEffectRecord, B extends ActionTypes<A>, ErrorType extends unknown = Error> = {
   readonly [P in keyof A]: [
@@ -45,7 +48,7 @@ type SagaBoilerplate<A extends SideEffectRecord, B extends ActionTypes<A>, Error
     // TODO Reducer,
     Reducer,
     // TODO Saga,
-    () => undefined
+    (...params: Parameters<A[P]>) => SagaIterator<void>
   ]
 };
 
@@ -56,7 +59,53 @@ export const concoctBoilerplate = <A extends SideEffectRecord, B extends ActionT
 
   const keys = Object.keys(sideEffects) as ReadonlyArray<keyof A>;
 
-  return keys.reduce((acc, k) => ({
+  return keys.reduce((acc, k) => {
+
+    const reducer = (action: Action<string> & { readonly payload?: any, readonly error?: any }, state: any) => {
+      switch (action.type) {
+        case actionTypes[k][0]:
+          return {
+            ...state,
+            loading: true
+          };
+        case actionTypes[k][1]:
+          return {
+            ...state,
+            loading: false,
+            result: action.payload.result,
+            error: undefined
+          };
+        case actionTypes[k][2]:
+          return {
+            ...state,
+            loading: false,
+            result: undefined,
+            error: action.error
+          };
+        default:
+          return state;
+      }
+    };
+
+    function* saga (...params: Parameters<A[typeof k]>) {
+      try {
+        const result = yield call(sideEffects[k], ...params);
+  
+        yield put({
+          payload: {
+            result
+          },
+          type: actionTypes[k][1],
+        });
+      } catch (error) {
+        yield put({
+          type: actionTypes[k][2],
+          error,
+        });
+      }
+    }
+
+    return {
     ...acc,
     [k]: [
       // PERFORM SIDE EFFECT (e.g. GET)
@@ -78,34 +127,9 @@ export const concoctBoilerplate = <A extends SideEffectRecord, B extends ActionT
         type: actionTypes[k][2],
         error
       }),
-      // TODO Reducer,
-      (action: Action<string> & { readonly payload?: any, readonly error?: any }, state: any) => {
-        switch (action.type) {
-          case actionTypes[k][0]:
-            return {
-              ...state,
-              loading: true
-            };
-          case actionTypes[k][1]:
-            return {
-              ...state,
-              loading: false,
-              result: action.payload.result,
-              error: undefined
-            };
-          case actionTypes[k][2]:
-            return {
-              ...state,
-              loading: false,
-              result: undefined,
-              error: action.error
-            };
-          default:
-            return state;
-        }
-      },
-      // TODO Saga,
-      () => undefined
+      reducer,
+      saga,
     ]
-  }), {}) as SagaBoilerplate<A, B>;
+  };
+  }, {}) as SagaBoilerplate<A, B>;
 }

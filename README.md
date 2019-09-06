@@ -2,7 +2,7 @@
 
 Take the boilerplate out of your React/Redux/Saga stack using the magic of TypeScript! 🧙
 
-![SAGAMATRON converting side effects into happyness](docs/logo.png "SAGAMATRON Logo")
+![SAGAMATRON converting side effects into happiness](docs/logo.png "SAGAMATRON Logo")
 
 ## Summary
 
@@ -19,7 +19,7 @@ Here at Agile Digital we are big on using
 [Sagas](https://github.com/redux-saga/redux-saga)
 to manage state and side effects.
 
-However, the benfits of redux-saga come with a downside.
+However, the benefits of redux-saga come with a downside.
 There is a lot of boilerplate code that needs to be written
 to support the patterns enforced by redux and redux-saga.
 
@@ -33,7 +33,7 @@ for example when managing temporary UI state,
 their simplicity can tempt developers to manage more and more
 of the application's state using them.
 Initially this trade off might seem successful due to faster
-cycle times and a percieved reduction in complexity
+cycle times and a perceived reduction in complexity
 but their are hidden costs that will appear later in
 the lifecycle of a project.
 
