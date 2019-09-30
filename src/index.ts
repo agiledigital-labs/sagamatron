@@ -1,6 +1,7 @@
 import { FluxStandardAction } from "flux-standard-action";
 import { Reducer, ReducersMapObject } from "redux";
-import { all, call, Effect, put, takeLatest } from "redux-saga/effects";
+import { all, call, put, takeLatest } from "redux-saga/effects";
+import { SagaIterator } from "@redux-saga/core";
 
 // tslint:disable: object-literal-sort-keys
 
@@ -19,8 +20,6 @@ type SideEffectRecord<A = any> = ReadonlyRecord<
 type ActionTypes<A extends SideEffectRecord<unknown>> = {
   readonly [P in keyof A]: readonly [string, string, string, string];
 };
-
-export type SagaIterator<RT> = Generator<Effect<unknown>, RT, unknown>;
 
 type Action = FluxStandardAction<
   string,
