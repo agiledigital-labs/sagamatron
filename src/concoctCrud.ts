@@ -1,4 +1,4 @@
-import { combineReducers, ReducersMapObject } from "redux";
+import { combineReducers, Reducer, ReducersMapObject } from "redux";
 import {
   ActionTypes,
   concoctBoilerplate,
@@ -113,20 +113,19 @@ export const concoctCrud = <
 ): SagaBoilerplate<
   typeof repo,
   ActionTypes<typeof repo>,
-  // TODO better key than just string here (use EntityNamePlural?)
-  { readonly [k: string]: CrudState<typeof repo> }
+  { readonly [k in EntityNamePlural]: CrudState<typeof repo> }
 > => {
   const { actions, rootReducer, rootSaga } = concoctBoilerplate(
     repo,
     actionTypes(entityName, entityNamePlural)
   );
 
+  // TODO remove these casts
   const entityReducer = {
-    // TODO remove this `as`
     [entityNamePlural]: combineReducers(rootReducer as ReducersMapObject<
       CrudState<typeof repo>
     >)
-  };
+  } as { readonly [k in EntityNamePlural]: Reducer<CrudState<typeof repo>> };
 
   return { actions, rootReducer: entityReducer, rootSaga };
 };
