@@ -5,19 +5,21 @@ import { all, call, put, takeLatest } from "redux-saga/effects";
 
 // tslint:disable: object-literal-sort-keys
 
-type ReadonlyRecord<K extends string, T> = {
+export type ReadonlyRecord<K extends string, T> = {
   readonly [P in K]: T;
 };
 
 // TODO: better error type?
 // TODO: remove any?
 // tslint:disable-next-line: no-any
-type SideEffectRecord<A = any> = ReadonlyRecord<
+export type SideEffectRecord<A = any> = ReadonlyRecord<
   string,
-  (...args: readonly A[]) => unknown
+  // tslint:disable-next-line: no-any
+  (...args: readonly A[]) => any
 >;
 
-type ActionTypes<A extends SideEffectRecord<unknown>> = {
+// tslint:disable-next-line: no-any
+export type ActionTypes<A extends SideEffectRecord<any>> = {
   readonly [P in keyof A]: readonly [string, string, string, string];
 };
 
@@ -28,7 +30,8 @@ type Action = FluxStandardAction<
 
 // PERFORM SIDE EFFECT (e.g. GET)
 type SideEffectAction<
-  A extends SideEffectRecord<unknown>,
+  // tslint:disable-next-line: no-any
+  A extends SideEffectRecord<any>,
   B extends ActionTypes<A>,
   P extends keyof A
 > = {
@@ -46,7 +49,8 @@ type ExtractResult<A extends () => unknown> = ReturnType<A> extends Promise<
 
 type SagaActionsArray<
   P extends keyof A,
-  A extends SideEffectRecord<unknown>,
+  // tslint:disable-next-line: no-any
+  A extends SideEffectRecord<any>,
   B extends ActionTypes<A>,
   ErrorType extends unknown = Error
 > = readonly [
@@ -77,38 +81,43 @@ type SagaActionsArray<
 ];
 
 type SagaActionsRecord<
-  A extends SideEffectRecord<unknown>,
+  // tslint:disable-next-line: no-any
+  A extends SideEffectRecord<any>,
   B extends ActionTypes<A>,
   ErrorType extends unknown = Error
 > = {
   readonly [P in keyof A]: SagaActionsArray<P, A, B, ErrorType>;
 };
 
-type SagaBoilerplate<
-  A extends SideEffectRecord<unknown>,
+export type SagaBoilerplate<
+  // tslint:disable-next-line: no-any
+  A extends SideEffectRecord<any>,
   B extends ActionTypes<A>,
+  S,
   ErrorType extends unknown = Error
 > = {
   readonly actions: SagaActionsRecord<A, B, ErrorType>;
   // TODO: better types for the reducer
-  readonly rootReducer: ReducersMapObject;
+  readonly rootReducer: ReducersMapObject<S>;
   readonly rootSaga: () => SagaIterator<void>;
 };
 
 export const concoctBoilerplate = <
   A extends SideEffectRecord,
   B extends ActionTypes<A>,
-  C = {}
+  // TODO better state type here
+  // tslint:disable-next-line: no-any
+  S = ReadonlyRecord<string, any>
 >(
   sideEffects: A,
   actionTypes: B,
-  defaultState?: C
-): SagaBoilerplate<A, B> => {
+  defaultState?: S
+): SagaBoilerplate<A, B, S> => {
   const keys = Object.keys(sideEffects) as ReadonlyArray<keyof A>;
 
   const actions = keys.reduce((acc, k) => {
     // tslint:disable-next-line: one-variable-per-declaration
-    const reducer = (state: C | undefined = defaultState, action: Action) => {
+    const reducer = (state: S | undefined = defaultState, action: Action) => {
       switch (action.type) {
         case actionTypes[k][0]:
           return {
@@ -194,13 +203,13 @@ export const concoctBoilerplate = <
     // TODO get rid of this cast
   }, {}) as SagaActionsRecord<A, B>;
 
-  const rootReducer: ReducersMapObject = keys.reduce(
+  const rootReducer = keys.reduce(
     (acc, k) => ({
       ...acc,
       [actionTypes[k][3]]: actions[k][3]
     }),
     {}
-  );
+  ) as ReducersMapObject<S>;
 
   function* rootSaga(): SagaIterator<void> {
     // tslint:disable-next-line: no-expression-statement no-unsafe-any
