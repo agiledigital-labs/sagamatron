@@ -1,3 +1,4 @@
+import { combineReducers } from "redux";
 import {
   ActionTypes,
   concoctBoilerplate,
@@ -5,80 +6,120 @@ import {
   SagaBoilerplate
 } from "./concoctBoilerplate";
 
-type Persisted<Entity, ID> = Entity & { readonly id: ID };
-
 export type EntityRepository<
-  Entity,
-  ID = string,
-  ListParams = { readonly offset: number; readonly limit: number },
-  ListResponse = {
-    readonly total: number;
-    readonly items: ReadonlyArray<Persisted<Entity, ID>>;
-  },
-  GetResponse = { readonly item: Persisted<Entity, ID> },
-  CreateParams = { readonly item: Entity },
-  CreateResponse = { readonly item: Persisted<Entity, ID> },
-  UpdateParams = { readonly id: ID; readonly item: Partial<Entity> },
-  UpdateResponse = { readonly item: Persisted<Entity, ID> },
-  DeleteResponse = {}
+  ID,
+  // tslint:disable: no-any readonly-array
+  ListParams extends any[],
+  ListResponse,
+  GetResponse,
+  CreateParams extends any[],
+  CreateResponse,
+  UpdateParams extends any[],
+  // tslint:enable: no-any readonly-array
+  UpdateResponse,
+  DeleteResponse
 > = {
-  readonly list: (params: ListParams) => ListResponse;
+  readonly list: (...params: ListParams) => ListResponse;
   readonly get: (id: ID) => GetResponse;
-  readonly create: (params: CreateParams) => CreateResponse;
-  readonly update: (params: UpdateParams) => UpdateResponse;
+  readonly create: (...params: CreateParams) => CreateResponse;
+  readonly update: (...params: UpdateParams) => UpdateResponse;
   readonly delete: (id: ID) => DeleteResponse;
 };
 
-export const actionTypes = <Entity>(
-  entityName: string
-): ActionTypes<EntityRepository<Entity>> => {
+export const actionTypes = (
+  entityName: string,
+  entityNamePlural: string
+): ActionTypes<
+  // tslint:disable-next-line: no-any
+  EntityRepository<any, any, any, any, any, any, any, any, any>
+> => {
   const entityNameUpper = entityName.toUpperCase();
+  const entityNamePluralUpper = entityNamePlural.toUpperCase();
 
   return {
     list: [
-      `LIST_${entityNameUpper}`,
-      `LIST_${entityNameUpper}_SUCCESS`,
-      `LIST_${entityNameUpper}_FAILURE`,
-      `${entityName}List`
+      `LIST_${entityNamePluralUpper}`,
+      `LIST_${entityNamePluralUpper}_SUCCESS`,
+      `LIST_${entityNamePluralUpper}_FAILURE`,
+      "list"
     ],
     get: [
       `GET_${entityNameUpper}`,
       `GET_${entityNameUpper}_SUCCESS`,
       `GET_${entityNameUpper}_FAILURE`,
-      `${entityName}`
+      "retrieved"
     ],
     create: [
       `CREATE_${entityNameUpper}`,
       `CREATE_${entityNameUpper}_SUCCESS`,
       `CREATE_${entityNameUpper}_FAILURE`,
-      `${entityName}Created`
+      "created"
     ],
     update: [
       `UPDATE_${entityNameUpper}`,
       `UPDATE_${entityNameUpper}_SUCCESS`,
       `UPDATE_${entityNameUpper}_FAILURE`,
-      `${entityName}Updated`
+      "updated"
     ],
     delete: [
       `DELETE_${entityNameUpper}`,
       `DELETE_${entityNameUpper}_SUCCESS`,
       `DELETE_${entityNameUpper}_FAILURE`,
-      `${entityName}Deleted`
+      "deleted"
     ]
   };
 };
 
 export const concoctCrud = <
-  Entity,
+  EntityNamePlural extends string,
+  ID,
+  // tslint:disable: no-any readonly-array
+  ListParams extends any[],
+  ListResponse,
+  GetResponse,
+  CreateParams extends any[],
+  CreateResponse,
+  UpdateParams extends any[],
+  // tslint:enable: no-any readonly-array
+  UpdateResponse,
+  DeleteResponse,
   // TODO better state type here
-  // tslint:disable-next-line: no-any
-  S = ReadonlyRecord<string, any>
+  S = ReadonlyRecord<
+    // tslint:disable-next-line: max-union-size
+    "list" | "retrieved" | "created" | "updated" | "deleted",
+    // tslint:disable-next-line: no-any
+    any
+  >
 >(
   entityName: string,
-  repo: EntityRepository<Entity>,
+  entityNamePlural: EntityNamePlural,
+  repo: EntityRepository<
+    ID,
+    ListParams,
+    ListResponse,
+    GetResponse,
+    CreateParams,
+    CreateResponse,
+    UpdateParams,
+    UpdateResponse,
+    DeleteResponse
+  >,
   defaultState?: S
 ): SagaBoilerplate<
-  EntityRepository<Entity>,
-  ActionTypes<EntityRepository<Entity>>,
-  S
-> => concoctBoilerplate(repo, actionTypes<Entity>(entityName), defaultState);
+  typeof repo,
+  ActionTypes<typeof repo>,
+  // TODO better key than just string here (use EntityNamePlural?)
+  { readonly [k: string]: S }
+> => {
+  const { actions, rootReducer, rootSaga } = concoctBoilerplate(
+    repo,
+    actionTypes(entityName, entityNamePlural),
+    defaultState
+  );
+
+  const entityReducer = {
+    [entityNamePlural]: combineReducers(rootReducer)
+  };
+
+  return { actions, rootReducer: entityReducer, rootSaga };
+};

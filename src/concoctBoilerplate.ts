@@ -14,8 +14,8 @@ export type ReadonlyRecord<K extends string, T> = {
 // tslint:disable-next-line: no-any
 export type SideEffectRecord<A = any> = ReadonlyRecord<
   string,
-  // tslint:disable-next-line: no-any
-  (...args: readonly A[]) => any
+  // tslint:disable-next-line: no-any readonly-array
+  (...args: A[]) => any
 >;
 
 // tslint:disable-next-line: no-any
