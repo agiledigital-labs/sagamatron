@@ -115,8 +115,7 @@ export const concoctBoilerplate = <
 >(
   sideEffects: A,
   actionTypes: B
-  // tslint:disable-next-line: no-any
-): SagaBoilerplate<A, B, ReadonlyRecord<string, any>> => {
+): SagaBoilerplate<A, B, ReadonlyRecord<string, State>> => {
   const keys = Object.keys(sideEffects) as ReadonlyArray<keyof A>;
 
   const defaultState: State = {
@@ -225,9 +224,7 @@ export const concoctBoilerplate = <
       [actionTypes[k][3]]: actions[k][3]
     }),
     {}
-    // TODO better state type here
-    // tslint:disable-next-line: no-any
-  ) as ReducersMapObject<ReadonlyRecord<string, any>>;
+  ) as ReducersMapObject<ReadonlyRecord<string, State>>;
 
   function* rootSaga(): SagaIterator<void> {
     // tslint:disable-next-line: no-expression-statement no-unsafe-any
