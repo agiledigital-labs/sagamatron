@@ -1,9 +1,10 @@
-import { combineReducers } from "redux";
+import { combineReducers, ReducersMapObject } from "redux";
 import {
   ActionTypes,
   concoctBoilerplate,
-  ReadonlyRecord,
-  SagaBoilerplate
+  ExtractResult,
+  SagaBoilerplate,
+  State
 } from "./concoctBoilerplate";
 
 export type EntityRepository<
@@ -47,7 +48,7 @@ export const actionTypes = (
       `GET_${entityNameUpper}`,
       `GET_${entityNameUpper}_SUCCESS`,
       `GET_${entityNameUpper}_FAILURE`,
-      "retrieved"
+      "current"
     ],
     create: [
       `CREATE_${entityNameUpper}`,
@@ -70,6 +71,18 @@ export const actionTypes = (
   };
 };
 
+export type CrudState<
+  // tslint:disable-next-line: no-any
+  ER extends EntityRepository<any, any, any, any, any, any, any, any, any>,
+  ErrorType extends unknown = Error
+> = {
+  readonly list: State<ErrorType, ExtractResult<ER["list"]>>;
+  readonly current: State<ErrorType, ExtractResult<ER["get"]>>;
+  readonly created: State<ErrorType, ExtractResult<ER["create"]>>;
+  readonly updated: State<ErrorType, ExtractResult<ER["update"]>>;
+  readonly deleted: State<ErrorType, ExtractResult<ER["delete"]>>;
+};
+
 export const concoctCrud = <
   EntityNamePlural extends string,
   ID,
@@ -82,14 +95,7 @@ export const concoctCrud = <
   UpdateParams extends any[],
   // tslint:enable: no-any readonly-array
   UpdateResponse,
-  DeleteResponse,
-  // TODO better state type here
-  S = ReadonlyRecord<
-    // tslint:disable-next-line: max-union-size
-    "list" | "retrieved" | "created" | "updated" | "deleted",
-    // tslint:disable-next-line: no-any
-    any
-  >
+  DeleteResponse
 >(
   entityName: string,
   entityNamePlural: EntityNamePlural,
@@ -103,22 +109,23 @@ export const concoctCrud = <
     UpdateParams,
     UpdateResponse,
     DeleteResponse
-  >,
-  defaultState?: S
+  >
 ): SagaBoilerplate<
   typeof repo,
   ActionTypes<typeof repo>,
   // TODO better key than just string here (use EntityNamePlural?)
-  { readonly [k: string]: S }
+  { readonly [k: string]: CrudState<typeof repo> }
 > => {
   const { actions, rootReducer, rootSaga } = concoctBoilerplate(
     repo,
-    actionTypes(entityName, entityNamePlural),
-    defaultState
+    actionTypes(entityName, entityNamePlural)
   );
 
   const entityReducer = {
-    [entityNamePlural]: combineReducers(rootReducer)
+    // TODO remove this `as`
+    [entityNamePlural]: combineReducers(rootReducer as ReducersMapObject<
+      CrudState<typeof repo>
+    >)
   };
 
   return { actions, rootReducer: entityReducer, rootSaga };

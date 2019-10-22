@@ -33,15 +33,14 @@ it("concocts CRUD boilerplate", async () => {
         username: user.username
       });
     },
-    // tslint:disable-next-line: variable-name
-    delete: (_id: string): Promise<void> => {
-      return Promise.resolve();
+    delete: (id: string): Promise<string> => {
+      return Promise.resolve(id);
     }
   };
 
   const {
     actions: {
-      get: [getUser],
+      get: [getUser, getUserSuccess],
       list: [listUsers]
     },
     rootReducer,
@@ -52,6 +51,31 @@ it("concocts CRUD boilerplate", async () => {
   const listAction = listUsers();
 
   expect(rootReducer.users).toBeDefined();
+
+  const nextState = rootReducer.users(
+    {
+      list: { loading: false, result: [{ id: "1234", username: "username" }] },
+      current: { loading: false },
+      created: { loading: false },
+      updated: { loading: false },
+      deleted: { loading: false }
+    },
+    getUserSuccess({ id: "5678", username: "anotheruser" })
+  );
+
+  expect(nextState).toEqual({
+    list: { loading: false, result: [{ id: "1234", username: "username" }] },
+    current: {
+      result: {
+        id: "5678",
+        username: "anotheruser"
+      },
+      loading: false
+    },
+    created: { loading: false },
+    updated: { loading: false },
+    deleted: { loading: false }
+  });
 
   rootSaga();
 

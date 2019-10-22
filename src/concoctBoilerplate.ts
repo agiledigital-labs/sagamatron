@@ -41,9 +41,10 @@ type SideEffectAction<
   };
 };
 
-type ExtractResult<A extends () => unknown> = ReturnType<A> extends Promise<
-  infer Result
->
+// tslint:disable-next-line: no-any readonly-array
+export type ExtractResult<A extends (...a: any[]) => any> = ReturnType<
+  A
+> extends Promise<infer Result>
   ? Result
   : ReturnType<A>;
 
@@ -102,22 +103,34 @@ export type SagaBoilerplate<
   readonly rootSaga: () => SagaIterator<void>;
 };
 
+export type State<ErrorType extends unknown = Error, ResultType = unknown> = {
+  readonly loading: boolean;
+  readonly error?: ErrorType;
+  readonly result?: ResultType;
+};
+
 export const concoctBoilerplate = <
   A extends SideEffectRecord,
-  B extends ActionTypes<A>,
-  // TODO better state type here
-  // tslint:disable-next-line: no-any
-  S = ReadonlyRecord<string, any>
+  B extends ActionTypes<A>
 >(
   sideEffects: A,
-  actionTypes: B,
-  defaultState?: S
-): SagaBoilerplate<A, B, S> => {
+  actionTypes: B
+  // tslint:disable-next-line: no-any
+): SagaBoilerplate<A, B, ReadonlyRecord<string, any>> => {
   const keys = Object.keys(sideEffects) as ReadonlyArray<keyof A>;
+
+  const defaultState: State = {
+    error: undefined,
+    result: undefined,
+    loading: false
+  };
 
   const actions = keys.reduce((acc, k) => {
     // tslint:disable-next-line: one-variable-per-declaration
-    const reducer = (state: S | undefined = defaultState, action: Action) => {
+    const reducer = (
+      state: State | undefined = defaultState,
+      action: Action
+    ): State => {
       switch (action.type) {
         case actionTypes[k][0]:
           return {
@@ -138,10 +151,13 @@ export const concoctBoilerplate = <
             loading: false,
             result: undefined,
             error:
-              action.payload !== undefined ? action.payload.error : undefined
+              action.payload !== undefined
+                ? // tslint:disable-next-line: no-any
+                  (action.payload.error as any)
+                : undefined
           };
         default:
-          return state;
+          return state !== undefined ? state : defaultState;
       }
     };
 
@@ -209,7 +225,9 @@ export const concoctBoilerplate = <
       [actionTypes[k][3]]: actions[k][3]
     }),
     {}
-  ) as ReducersMapObject<S>;
+    // TODO better state type here
+    // tslint:disable-next-line: no-any
+  ) as ReducersMapObject<ReadonlyRecord<string, any>>;
 
   function* rootSaga(): SagaIterator<void> {
     // tslint:disable-next-line: no-expression-statement no-unsafe-any
