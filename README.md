@@ -49,6 +49,8 @@ of TypeScript to reduce the boilerplate of redux and redux-saga.
 
 ## Example
 
-The unit tests are a good example of how it all works: https://github.com/agiledigital/sagamatron/blob/master/src/concoctBoilerplate.test.ts
+The unit tests are a good example of how it all works:
+  * https://github.com/agiledigital/sagamatron/blob/master/src/concoctBoilerplate.test.ts
+  * https://github.com/agiledigital/sagamatron/blob/master/src/concoctCrud.test.ts
 
 We also have a basic project that demonstrates how sagamatron integrates with everything: https://github.com/agiledigital/react-redux-saga-sagamatron
