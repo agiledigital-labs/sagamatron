@@ -1,13 +1,15 @@
 {
   "name": "sagamatron",
   "description": "Take the boilerplate out of your React/Redux/Saga stack using the magic of TypeScript! 🧙",
-  "keywords": ["redux-saga"],
-  "version": "2.2.0",
+  "keywords": [
+    "redux-saga"
+  ],
+  "version": "2.2.1",
   "main": "dist/index.js",
   "license": "MIT",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/agiledigital/sagamatron"
+    "type": "git",
+    "url": "https://github.com/agiledigital/sagamatron"
   },
   "scripts": {
     "build": "tsc",
