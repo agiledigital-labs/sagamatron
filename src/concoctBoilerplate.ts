@@ -1,8 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable functional/no-mixed-type */
+/* eslint-disable functional/no-conditional-statement */
+/* eslint-disable functional/no-try-statement */
+/* eslint-disable functional/no-expression-statement */
+/* eslint-disable functional/functional-parameters */
+
 import { FluxStandardAction } from "flux-standard-action";
 import { Reducer, ReducersMapObject } from "redux";
 import { all, call, SagaGenerator, takeLatest, put } from "typed-redux-saga";
-
-// tslint:disable: object-literal-sort-keys
 
 export type ReadonlyRecord<K extends string, T> = {
   readonly [P in K]: T;
@@ -10,14 +15,12 @@ export type ReadonlyRecord<K extends string, T> = {
 
 // TODO: better error type?
 // TODO: remove any?
-// tslint:disable-next-line: no-any
 export type SideEffectRecord<A = any> = ReadonlyRecord<
   string,
-  // tslint:disable-next-line: no-any readonly-array
+  // eslint-disable-next-line functional/prefer-readonly-type
   (...args: A[]) => any
 >;
 
-// tslint:disable-next-line: no-any
 export type ActionTypes<A extends SideEffectRecord<any>> = {
   readonly [P in keyof A]: readonly [string, string, string, string];
 };
@@ -29,7 +32,6 @@ type Action = FluxStandardAction<
 
 // PERFORM SIDE EFFECT (e.g. GET)
 type SideEffectAction<
-  // tslint:disable-next-line: no-any
   A extends SideEffectRecord<any>,
   B extends ActionTypes<A>,
   P extends keyof A
@@ -40,7 +42,7 @@ type SideEffectAction<
   };
 };
 
-// tslint:disable-next-line: no-any readonly-array
+// eslint-disable-next-line functional/prefer-readonly-type
 export type ExtractResult<A extends (...a: any[]) => any> = ReturnType<
   A
 > extends Promise<infer Result>
@@ -49,7 +51,6 @@ export type ExtractResult<A extends (...a: any[]) => any> = ReturnType<
 
 type SagaActionsArray<
   P extends keyof A,
-  // tslint:disable-next-line: no-any
   A extends SideEffectRecord<any>,
   B extends ActionTypes<A>,
   ErrorType extends unknown = Error
@@ -81,7 +82,6 @@ type SagaActionsArray<
 ];
 
 type SagaActionsRecord<
-  // tslint:disable-next-line: no-any
   A extends SideEffectRecord<any>,
   B extends ActionTypes<A>,
   ErrorType extends unknown = Error
@@ -90,7 +90,6 @@ type SagaActionsRecord<
 };
 
 export type SagaBoilerplate<
-  // tslint:disable-next-line: no-any
   A extends SideEffectRecord<any>,
   B extends ActionTypes<A>,
   S,
@@ -124,7 +123,6 @@ export const concoctBoilerplate = <
   };
 
   const actions = keys.reduce((acc, k) => {
-    // tslint:disable-next-line: one-variable-per-declaration
     const reducer = (
       state: State | undefined = defaultState,
       action: Action
@@ -150,8 +148,7 @@ export const concoctBoilerplate = <
             result: undefined,
             error:
               action.payload !== undefined
-                ? // tslint:disable-next-line: no-any
-                  (action.payload.error as any)
+                ? (action.payload.error as any)
                 : undefined
           };
         default:
@@ -162,12 +159,10 @@ export const concoctBoilerplate = <
     function* saga(
       action: SideEffectAction<A, B, typeof k>
     ): SagaGenerator<void> {
-      // tslint:disable-next-line: no-try
       try {
         // TODO: https://github.com/agiledigital/typed-redux-saga
         const result = yield* call(sideEffects[k], ...action.payload.params);
 
-        // tslint:disable-next-line: no-expression-statement
         yield* put<Action>({
           type: actionTypes[k][1],
           payload: {
@@ -175,7 +170,6 @@ export const concoctBoilerplate = <
           }
         });
       } catch (error) {
-        // tslint:disable-next-line: no-expression-statement
         yield* put<Action>({
           type: actionTypes[k][2],
           payload: {
@@ -226,7 +220,6 @@ export const concoctBoilerplate = <
   ) as ReducersMapObject<ReadonlyRecord<string, State>>;
 
   function* rootSaga(): SagaGenerator<void> {
-    // tslint:disable-next-line: no-expression-statement no-unsafe-any
     yield* all(keys.map(k => takeLatest(actionTypes[k][0], actions[k][4])));
   }
 

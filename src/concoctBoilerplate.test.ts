@@ -1,6 +1,8 @@
-import { concoctBoilerplate } from ".";
+/* eslint-disable @typescript-eslint/require-await */
+/* eslint-disable functional/functional-parameters */
+/* eslint-disable functional/no-expression-statement */
 
-// tslint:disable: no-expression-statement
+import { concoctBoilerplate } from ".";
 
 it("concocts boilerplate", async () => {
   type User = { readonly id: string; readonly username: string };
@@ -20,7 +22,6 @@ it("concocts boilerplate", async () => {
     }
     // TODO support subsets
     // delete: (id: string): Promise<void> => {
-    //   // tslint:disable-next-line: no-reject
     //   return Promise.reject("Not implemented")
     // }
   };

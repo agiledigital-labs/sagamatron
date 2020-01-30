@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable functional/prefer-readonly-type */
+
 import { combineReducers, Reducer, ReducersMapObject } from "redux";
 import {
   ActionTypes,
@@ -9,14 +12,12 @@ import {
 
 export type EntityRepository<
   ID,
-  // tslint:disable: no-any readonly-array
   ListParams extends any[],
   ListResponse,
   GetResponse,
   CreateParams extends any[],
   CreateResponse,
   UpdateParams extends any[],
-  // tslint:enable: no-any readonly-array
   UpdateResponse,
   DeleteResponse
 > = {
@@ -31,7 +32,6 @@ export const actionTypes = (
   entityName: string,
   entityNamePlural: string
 ): ActionTypes<
-  // tslint:disable-next-line: no-any
   EntityRepository<any, any, any, any, any, any, any, any, any>
 > => {
   const entityNameUpper = entityName.toUpperCase();
@@ -72,7 +72,6 @@ export const actionTypes = (
 };
 
 export type CrudState<
-  // tslint:disable-next-line: no-any
   ER extends EntityRepository<any, any, any, any, any, any, any, any, any>,
   ErrorType extends unknown = Error
 > = {
@@ -86,14 +85,12 @@ export type CrudState<
 export const concoctCrud = <
   EntityNamePlural extends string,
   ID,
-  // tslint:disable: no-any readonly-array
   ListParams extends any[],
   ListResponse,
   GetResponse,
   CreateParams extends any[],
   CreateResponse,
   UpdateParams extends any[],
-  // tslint:enable: no-any readonly-array
   UpdateResponse,
   DeleteResponse
 >(

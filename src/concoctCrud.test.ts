@@ -1,6 +1,8 @@
-import { concoctCrud } from "./concoctCrud";
+/* eslint-disable @typescript-eslint/require-await */
+/* eslint-disable functional/functional-parameters */
+/* eslint-disable functional/no-expression-statement */
 
-// tslint:disable: no-expression-statement
+import { concoctCrud } from "./concoctCrud";
 
 it("concocts CRUD boilerplate", async () => {
   type User = { readonly username: string };
