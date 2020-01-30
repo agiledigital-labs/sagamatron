@@ -40,7 +40,8 @@
     "atLeast": 98.69
   },
   "dependencies": {
-    "flux-standard-action": "^2.1.1"
+    "flux-standard-action": "^2.1.1",
+    "typed-redux-saga": "^1.0.6"
   },
   "peerDependencies": {
     "redux": "^4.0.4",

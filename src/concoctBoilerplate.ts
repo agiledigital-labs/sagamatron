@@ -1,7 +1,6 @@
-import { SagaIterator } from "@redux-saga/core";
 import { FluxStandardAction } from "flux-standard-action";
 import { Reducer, ReducersMapObject } from "redux";
-import { all, call, put, takeLatest } from "redux-saga/effects";
+import { all, call, SagaGenerator, takeLatest, put } from "typed-redux-saga";
 
 // tslint:disable: object-literal-sort-keys
 
@@ -78,7 +77,7 @@ type SagaActionsArray<
   },
   // TODO: better types for the reducer
   Reducer<object, Action>,
-  (action: SideEffectAction<A, B, P>) => SagaIterator<void>
+  (action: SideEffectAction<A, B, P>) => SagaGenerator<void>
 ];
 
 type SagaActionsRecord<
@@ -100,7 +99,7 @@ export type SagaBoilerplate<
   readonly actions: SagaActionsRecord<A, B, ErrorType>;
   // TODO: better types for the reducer
   readonly rootReducer: ReducersMapObject<S>;
-  readonly rootSaga: () => SagaIterator<void>;
+  readonly rootSaga: () => SagaGenerator<void>;
 };
 
 export type State<ErrorType extends unknown = Error, ResultType = unknown> = {
@@ -162,14 +161,14 @@ export const concoctBoilerplate = <
 
     function* saga(
       action: SideEffectAction<A, B, typeof k>
-    ): SagaIterator<void> {
+    ): SagaGenerator<void> {
       // tslint:disable-next-line: no-try
       try {
         // TODO: https://github.com/agiledigital/typed-redux-saga
-        const result = yield call(sideEffects[k], ...action.payload.params);
+        const result = yield* call(sideEffects[k], ...action.payload.params);
 
         // tslint:disable-next-line: no-expression-statement
-        yield put<Action>({
+        yield* put<Action>({
           type: actionTypes[k][1],
           payload: {
             result
@@ -177,7 +176,7 @@ export const concoctBoilerplate = <
         });
       } catch (error) {
         // tslint:disable-next-line: no-expression-statement
-        yield put<Action>({
+        yield* put<Action>({
           type: actionTypes[k][2],
           payload: {
             error
@@ -226,9 +225,9 @@ export const concoctBoilerplate = <
     {}
   ) as ReducersMapObject<ReadonlyRecord<string, State>>;
 
-  function* rootSaga(): SagaIterator<void> {
+  function* rootSaga(): SagaGenerator<void> {
     // tslint:disable-next-line: no-expression-statement no-unsafe-any
-    yield all(keys.map(k => takeLatest(actionTypes[k][0], actions[k][4])));
+    yield* all(keys.map(k => takeLatest(actionTypes[k][0], actions[k][4])));
   }
 
   return {
