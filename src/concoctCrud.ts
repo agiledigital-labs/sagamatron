@@ -31,9 +31,17 @@ export type EntityRepository<
 export const actionTypes = (
   entityName: string,
   entityNamePlural: string
-): ActionTypes<
-  EntityRepository<any, any, any, any, any, any, any, any, any>
-> => {
+): ActionTypes<EntityRepository<
+  any,
+  any,
+  any,
+  any,
+  any,
+  any,
+  any,
+  any,
+  any
+>> => {
   const entityNameUpper = entityName.toUpperCase();
   const entityNamePluralUpper = entityNamePlural.toUpperCase();
 
@@ -119,9 +127,9 @@ export const concoctCrud = <
 
   // TODO remove these casts
   const entityReducer = {
-    [entityNamePlural]: combineReducers(rootReducer as ReducersMapObject<
-      CrudState<typeof repo>
-    >)
+    [entityNamePlural]: combineReducers(
+      rootReducer as ReducersMapObject<CrudState<typeof repo>>
+    )
   } as { readonly [k in EntityNamePlural]: Reducer<CrudState<typeof repo>> };
 
   return { actions, rootReducer: entityReducer, rootSaga };
