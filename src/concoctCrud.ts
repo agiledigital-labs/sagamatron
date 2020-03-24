@@ -7,7 +7,7 @@ import {
   concoctBoilerplate,
   ExtractResult,
   SagaBoilerplate,
-  State
+  State,
 } from "./concoctBoilerplate";
 
 export type EntityRepository<
@@ -31,17 +31,9 @@ export type EntityRepository<
 export const actionTypes = (
   entityName: string,
   entityNamePlural: string
-): ActionTypes<EntityRepository<
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any
->> => {
+): ActionTypes<
+  EntityRepository<any, any, any, any, any, any, any, any, any>
+> => {
   const entityNameUpper = entityName.toUpperCase();
   const entityNamePluralUpper = entityNamePlural.toUpperCase();
 
@@ -50,32 +42,32 @@ export const actionTypes = (
       `LIST_${entityNamePluralUpper}`,
       `LIST_${entityNamePluralUpper}_SUCCESS`,
       `LIST_${entityNamePluralUpper}_FAILURE`,
-      "list"
+      "list",
     ],
     get: [
       `GET_${entityNameUpper}`,
       `GET_${entityNameUpper}_SUCCESS`,
       `GET_${entityNameUpper}_FAILURE`,
-      "current"
+      "current",
     ],
     create: [
       `CREATE_${entityNameUpper}`,
       `CREATE_${entityNameUpper}_SUCCESS`,
       `CREATE_${entityNameUpper}_FAILURE`,
-      "created"
+      "created",
     ],
     update: [
       `UPDATE_${entityNameUpper}`,
       `UPDATE_${entityNameUpper}_SUCCESS`,
       `UPDATE_${entityNameUpper}_FAILURE`,
-      "updated"
+      "updated",
     ],
     delete: [
       `DELETE_${entityNameUpper}`,
       `DELETE_${entityNameUpper}_SUCCESS`,
       `DELETE_${entityNameUpper}_FAILURE`,
-      "deleted"
-    ]
+      "deleted",
+    ],
   };
 };
 
@@ -129,7 +121,7 @@ export const concoctCrud = <
   const entityReducer = {
     [entityNamePlural]: combineReducers(
       rootReducer as ReducersMapObject<CrudState<typeof repo>>
-    )
+    ),
   } as { readonly [k in EntityNamePlural]: Reducer<CrudState<typeof repo>> };
 
   return { actions, rootReducer: entityReducer, rootSaga };
