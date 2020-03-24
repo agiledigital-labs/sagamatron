@@ -119,7 +119,7 @@ export const concoctBoilerplate = <
   const defaultState: State = {
     error: undefined,
     result: undefined,
-    loading: false
+    loading: false,
   };
 
   const actions = keys.reduce((acc, k) => {
@@ -131,7 +131,7 @@ export const concoctBoilerplate = <
         case actionTypes[k][0]:
           return {
             ...state,
-            loading: true
+            loading: true,
           };
         case actionTypes[k][1]:
           return {
@@ -139,7 +139,7 @@ export const concoctBoilerplate = <
             loading: false,
             result:
               action.payload !== undefined ? action.payload.result : undefined,
-            error: undefined
+            error: undefined,
           };
         case actionTypes[k][2]:
           return {
@@ -149,7 +149,7 @@ export const concoctBoilerplate = <
             error:
               action.payload !== undefined
                 ? (action.payload.error as any)
-                : undefined
+                : undefined,
           };
         default:
           return state !== undefined ? state : defaultState;
@@ -166,15 +166,15 @@ export const concoctBoilerplate = <
         yield* put<Action>({
           type: actionTypes[k][1],
           payload: {
-            result
-          }
+            result,
+          },
         });
       } catch (error) {
         yield* put<Action>({
           type: actionTypes[k][2],
           payload: {
-            error
-          }
+            error,
+          },
         });
       }
     }
@@ -186,27 +186,27 @@ export const concoctBoilerplate = <
         (...params: Parameters<A[typeof k]>) => ({
           type: actionTypes[k][0],
           payload: {
-            params
-          }
+            params,
+          },
         }),
         // PERFORM SIDE EFFECT SUCCESS (e.g. GET SUCCESS)
         (result: ExtractResult<A[typeof k]>) => ({
           type: actionTypes[k][1],
           payload: {
-            result
-          }
+            result,
+          },
         }),
         // PERFORM SIDE EFFECT FAILURE (e.g. GET FAILURE)
         (error: unknown) => ({
           type: actionTypes[k][2],
           payload: {
-            error
+            error,
           },
-          error: true
+          error: true,
         }),
         reducer,
-        saga
-      ]
+        saga,
+      ],
     };
     // TODO get rid of this cast
   }, {}) as SagaActionsRecord<A, B>;
@@ -214,18 +214,18 @@ export const concoctBoilerplate = <
   const rootReducer = keys.reduce(
     (acc, k) => ({
       ...acc,
-      [actionTypes[k][3]]: actions[k][3]
+      [actionTypes[k][3]]: actions[k][3],
     }),
     {}
   ) as ReducersMapObject<ReadonlyRecord<string, State>>;
 
   function* rootSaga(): SagaGenerator<void> {
-    yield* all(keys.map(k => takeLatest(actionTypes[k][0], actions[k][4])));
+    yield* all(keys.map((k) => takeLatest(actionTypes[k][0], actions[k][4])));
   }
 
   return {
     actions,
     rootReducer,
-    rootSaga
+    rootSaga,
   };
 };

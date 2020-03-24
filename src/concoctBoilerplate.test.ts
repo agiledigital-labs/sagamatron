@@ -11,15 +11,15 @@ it("concocts boilerplate", async () => {
     get: (id: string): Promise<User> => {
       return Promise.resolve({
         id,
-        username: "username"
+        username: "username",
       });
     },
     syncGet: (id: string): User => {
       return {
         id,
-        username: "username"
+        username: "username",
       };
-    }
+    },
     // TODO support subsets
     // delete: (id: string): Promise<void> => {
     //   return Promise.reject("Not implemented")
@@ -32,17 +32,17 @@ it("concocts boilerplate", async () => {
       "SYNC_GET_USER",
       "SYNC_GET_USER_SUCCESS",
       "SYNC_GET_USER_FAILURE",
-      "syncUser"
-    ]
+      "syncUser",
+    ],
   } as const;
 
   const {
     actions: {
       get: [getUser],
-      syncGet: [getSyncUser]
+      syncGet: [getSyncUser],
     },
     rootReducer,
-    rootSaga
+    rootSaga,
   } = concoctBoilerplate(userApi, actionTypes);
 
   const action = getUser("42");
@@ -55,14 +55,14 @@ it("concocts boilerplate", async () => {
   expect(action).toEqual({
     type: "GET_USER",
     payload: {
-      params: ["42"]
-    }
+      params: ["42"],
+    },
   });
 
   expect(syncAction).toEqual({
     type: "SYNC_GET_USER",
     payload: {
-      params: ["42"]
-    }
+      params: ["42"],
+    },
   });
 });

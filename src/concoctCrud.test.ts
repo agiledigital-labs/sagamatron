@@ -13,40 +13,40 @@ it("concocts CRUD boilerplate", async () => {
       return Promise.resolve([
         {
           id: "1234",
-          username: "username"
-        }
+          username: "username",
+        },
       ]);
     },
     get: (id: string): Promise<PersistedUser> => {
       return Promise.resolve({
         id,
-        username: "username"
+        username: "username",
       });
     },
     create: (user: User): Promise<PersistedUser> => {
       return Promise.resolve({
         id: "1234",
-        username: user.username
+        username: user.username,
       });
     },
     update: (id: string, user: User): Promise<PersistedUser> => {
       return Promise.resolve({
         id,
-        username: user.username
+        username: user.username,
       });
     },
     delete: (id: string): Promise<string> => {
       return Promise.resolve(id);
-    }
+    },
   };
 
   const {
     actions: {
       get: [getUser, getUserSuccess],
-      list: [listUsers]
+      list: [listUsers],
     },
     rootReducer,
-    rootSaga
+    rootSaga,
   } = concoctCrud("user", "users", userApi);
 
   const getAction = getUser("42");
@@ -60,7 +60,7 @@ it("concocts CRUD boilerplate", async () => {
       current: { loading: false },
       created: { loading: false },
       updated: { loading: false },
-      deleted: { loading: false }
+      deleted: { loading: false },
     },
     getUserSuccess({ id: "5678", username: "anotheruser" })
   );
@@ -70,13 +70,13 @@ it("concocts CRUD boilerplate", async () => {
     current: {
       result: {
         id: "5678",
-        username: "anotheruser"
+        username: "anotheruser",
       },
-      loading: false
+      loading: false,
     },
     created: { loading: false },
     updated: { loading: false },
-    deleted: { loading: false }
+    deleted: { loading: false },
   });
 
   rootSaga();
@@ -84,14 +84,14 @@ it("concocts CRUD boilerplate", async () => {
   expect(getAction).toEqual({
     type: "GET_USER",
     payload: {
-      params: ["42"]
-    }
+      params: ["42"],
+    },
   });
 
   expect(listAction).toEqual({
     type: "LIST_USERS",
     payload: {
-      params: []
-    }
+      params: [],
+    },
   });
 });
