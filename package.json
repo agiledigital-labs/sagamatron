@@ -20,7 +20,7 @@
     "release": "yarn build && yarn lint && yarn type-coverage && yarn publish"
   },
   "devDependencies": {
-    "@types/jest": "^25.1.4",
+    "@types/jest": "^25.1.5",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/experimental-utils": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
