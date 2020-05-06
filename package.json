@@ -35,7 +35,7 @@
     "redux": "^4.0.4",
     "redux-saga": "^1.1.1",
     "ts-jest": "^25.4.0",
-    "type-coverage": "^2.4.3",
+    "type-coverage": "^2.5.0",
     "typescript": "^3.8.3"
   },
   "typeCoverage": {
