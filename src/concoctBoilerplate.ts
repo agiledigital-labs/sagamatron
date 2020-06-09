@@ -5,6 +5,9 @@
 /* eslint-disable functional/no-expression-statement */
 /* eslint-disable functional/functional-parameters */
 
+// TODO fix these and re-enable rule.
+/* eslint-disable total-functions/no-array-subscript */
+
 import { FluxStandardAction } from "flux-standard-action";
 import { Reducer, ReducersMapObject } from "redux";
 import { all, call, SagaGenerator, takeLatest, put } from "typed-redux-saga";
