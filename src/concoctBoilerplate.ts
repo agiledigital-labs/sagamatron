@@ -80,7 +80,7 @@ type SagaActionsArray<
     readonly error: true;
   },
   // TODO: better types for the reducer
-  Reducer<object, Action>,
+  Reducer<unknown, Action>,
   (action: SideEffectAction<A, B, P>) => SagaGenerator<void>
 ];
 
@@ -149,6 +149,8 @@ export const concoctBoilerplate = <
             ...state,
             loading: false,
             result: undefined,
+            // TODO fix this
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             error:
               action.payload !== undefined
                 ? (action.payload.error as any)
@@ -176,6 +178,8 @@ export const concoctBoilerplate = <
         yield* put<Action>({
           type: actionTypes[k][2],
           payload: {
+            // TODO fix this
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             error,
           },
         });
