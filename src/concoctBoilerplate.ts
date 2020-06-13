@@ -28,9 +28,9 @@ export type ActionTypes<A extends SideEffectRecord<any>> = {
   readonly [P in keyof A]: readonly [string, string, string, string];
 };
 
-type Action = FluxStandardAction<
+type Action<ErrorType extends unknown> = FluxStandardAction<
   string,
-  { readonly result?: unknown; readonly error?: unknown }
+  { readonly result?: unknown; readonly error?: ErrorType }
 >;
 
 // PERFORM SIDE EFFECT (e.g. GET)
@@ -46,7 +46,7 @@ type SideEffectAction<
 };
 
 // eslint-disable-next-line functional/prefer-readonly-type
-export type ExtractResult<A extends (...a: any[]) => any> = ReturnType<
+export type ExtractResult<A extends (...a: unknown[]) => any> = ReturnType<
   A
 > extends Promise<infer Result>
   ? Result
@@ -56,7 +56,7 @@ type SagaActionsArray<
   P extends keyof A,
   A extends SideEffectRecord<any>,
   B extends ActionTypes<A>,
-  ErrorType extends unknown = Error
+  ErrorType extends unknown
 > = readonly [
   // PERFORM SIDE EFFECT (e.g. GET)
   (...params: Parameters<A[P]>) => SideEffectAction<A, B, P>,
@@ -80,14 +80,14 @@ type SagaActionsArray<
     readonly error: true;
   },
   // TODO: better types for the reducer
-  Reducer<unknown, Action>,
+  Reducer<unknown, Action<ErrorType>>,
   (action: SideEffectAction<A, B, P>) => SagaGenerator<void>
 ];
 
 type SagaActionsRecord<
   A extends SideEffectRecord<any>,
   B extends ActionTypes<A>,
-  ErrorType extends unknown = Error
+  ErrorType extends unknown
 > = {
   readonly [P in keyof A]: SagaActionsArray<P, A, B, ErrorType>;
 };
@@ -96,7 +96,7 @@ export type SagaBoilerplate<
   A extends SideEffectRecord<any>,
   B extends ActionTypes<A>,
   S,
-  ErrorType extends unknown = Error
+  ErrorType extends unknown
 > = {
   readonly actions: SagaActionsRecord<A, B, ErrorType>;
   // TODO: better types for the reducer
@@ -104,7 +104,7 @@ export type SagaBoilerplate<
   readonly rootSaga: () => SagaGenerator<void>;
 };
 
-export type State<ErrorType extends unknown = Error, ResultType = unknown> = {
+export type State<ErrorType extends unknown, ResultType = unknown> = {
   readonly loading: boolean;
   readonly error?: ErrorType;
   readonly result?: ResultType;
@@ -116,20 +116,21 @@ export const concoctBoilerplate = <
 >(
   sideEffects: A,
   actionTypes: B
-): SagaBoilerplate<A, B, ReadonlyRecord<string, State>> => {
+): SagaBoilerplate<A, B, ReadonlyRecord<string, State<Error>>, Error> => {
   const keys = Object.keys(sideEffects) as ReadonlyArray<keyof A>;
 
-  const defaultState: State = {
+  const defaultState: State<Error> = {
     error: undefined,
     result: undefined,
     loading: false,
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const actions = keys.reduce((acc, k) => {
     const reducer = (
-      state: State | undefined = defaultState,
-      action: Action
-    ): State => {
+      state: State<Error> | undefined = defaultState,
+      action: Action<Error>
+    ): State<Error> => {
       switch (action.type) {
         case actionTypes[k][0]:
           return {
@@ -149,12 +150,8 @@ export const concoctBoilerplate = <
             ...state,
             loading: false,
             result: undefined,
-            // TODO fix this
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             error:
-              action.payload !== undefined
-                ? (action.payload.error as any)
-                : undefined,
+              action.payload !== undefined ? action.payload.error : undefined,
           };
         default:
           return state !== undefined ? state : defaultState;
@@ -168,14 +165,14 @@ export const concoctBoilerplate = <
         // TODO: https://github.com/agiledigital/typed-redux-saga
         const result = yield* call(sideEffects[k], ...action.payload.params);
 
-        yield* put<Action>({
+        yield* put<Action<Error>>({
           type: actionTypes[k][1],
           payload: {
             result,
           },
         });
       } catch (error) {
-        yield* put<Action>({
+        yield* put<Action<Error>>({
           type: actionTypes[k][2],
           payload: {
             // TODO fix this
@@ -216,7 +213,7 @@ export const concoctBoilerplate = <
       ],
     };
     // TODO get rid of this cast
-  }, {}) as SagaActionsRecord<A, B>;
+  }, {}) as SagaActionsRecord<A, B, Error>;
 
   const rootReducer = keys.reduce(
     (acc, k) => ({
@@ -224,7 +221,7 @@ export const concoctBoilerplate = <
       [actionTypes[k][3]]: actions[k][3],
     }),
     {}
-  ) as ReducersMapObject<ReadonlyRecord<string, State>>;
+  ) as ReducersMapObject<ReadonlyRecord<string, State<Error>>>;
 
   function* rootSaga(): SagaGenerator<void> {
     yield* all(keys.map((k) => takeLatest(actionTypes[k][0], actions[k][4])));

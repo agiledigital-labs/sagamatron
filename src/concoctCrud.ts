@@ -110,7 +110,8 @@ export const concoctCrud = <
 ): SagaBoilerplate<
   typeof repo,
   ActionTypes<typeof repo>,
-  { readonly [k in EntityNamePlural]: CrudState<typeof repo> }
+  { readonly [k in EntityNamePlural]: CrudState<typeof repo> },
+  Error
 > => {
   const { actions, rootReducer, rootSaga } = concoctBoilerplate(
     repo,
