@@ -117,7 +117,7 @@ export const concoctBoilerplate = <
   sideEffects: A,
   actionTypes: B
 ): SagaBoilerplate<A, B, ReadonlyRecord<string, State<Error>>, Error> => {
-  const keys: ReadonlyArray<string> = Object.keys({});
+  const keys: ReadonlyArray<string> = Object.keys(sideEffects);
 
   const defaultState: State<Error> = {
     error: undefined,
