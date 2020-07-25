@@ -119,6 +119,7 @@ export const concoctCrud = <
   );
 
   // TODO remove these casts
+  // eslint-disable-next-line total-functions/no-unsafe-type-assertion
   const entityReducer = {
     [entityNamePlural]: combineReducers(
       // eslint-disable-next-line total-functions/no-unsafe-type-assertion

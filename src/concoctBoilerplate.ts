@@ -125,7 +125,7 @@ export const concoctBoilerplate = <
     loading: false,
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, total-functions/no-unsafe-type-assertion
   const actions = keys.reduce((acc, k) => {
     const reducer = (
       state: State<Error> | undefined = defaultState,
