@@ -6565,10 +6565,10 @@ type-fest@^0.8.1:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
-typed-redux-saga@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/typed-redux-saga/-/typed-redux-saga-1.0.8.tgz#9e348883f1cc0df93ae89a2805da56e944d17043"
-  integrity sha512-pZHOSpFqOLsXi3ALonzhRCcAOdb1V5GF/KGRv4xAxM25heWvAfgnAS5BRdRasNW3DSOuBDmrMgtF9jhQq+qf/A==
+typed-redux-saga@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/typed-redux-saga/-/typed-redux-saga-1.2.0.tgz#120e700c0f10ae73e831f72d68e8279017ea9473"
+  integrity sha512-iEQJqgGeN26kKidG7Tka7QDd1F1DmP0IyzvQo2poCCgiAWxXi/LAJ/sg/H1GPy6lusYd+wrePQg33JU4WARQog==
 
 typedarray-to-buffer@^3.1.5:
   version "3.1.5"
