@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "flux-standard-action": "^2.1.1",
-    "snyk": "^1.369.2",
+    "snyk": "^1.369.3",
     "typed-redux-saga": "^1.2.0"
   },
   "peerDependencies": {
