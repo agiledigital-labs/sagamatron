@@ -119,10 +119,10 @@ export const concoctCrud = <
   );
 
   // TODO remove these casts
-  // eslint-disable-next-line total-functions/no-unsafe-type-assertion
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const entityReducer = {
     [entityNamePlural]: combineReducers(
-      // eslint-disable-next-line total-functions/no-unsafe-type-assertion
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       rootReducer as ReducersMapObject<CrudState<typeof repo>>
     ),
   } as { readonly [k in EntityNamePlural]: Reducer<CrudState<typeof repo>> };

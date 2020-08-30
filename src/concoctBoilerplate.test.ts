@@ -48,7 +48,9 @@ it("concocts boilerplate", async () => {
   const action = getUser("42");
   const syncAction = getSyncUser("42");
 
+  // eslint-disable-next-line total-functions/no-unsafe-subscript
   expect(rootReducer.user).toBeDefined();
+  // eslint-disable-next-line total-functions/no-unsafe-subscript
   expect(rootReducer.syncUser).toBeDefined();
   rootSaga();
 

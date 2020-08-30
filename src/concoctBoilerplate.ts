@@ -6,7 +6,7 @@
 /* eslint-disable functional/functional-parameters */
 
 // TODO fix these and re-enable rule.
-/* eslint-disable total-functions/no-array-subscript */
+/* eslint-disable total-functions/no-unsafe-subscript */
 
 import { FluxStandardAction } from "flux-standard-action";
 import { Reducer, ReducersMapObject } from "redux";
@@ -125,7 +125,7 @@ export const concoctBoilerplate = <
     loading: false,
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, total-functions/no-unsafe-type-assertion
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/consistent-type-assertions
   const actions = keys.reduce((acc, k) => {
     const reducer = (
       state: State<Error> | undefined = defaultState,
@@ -171,7 +171,7 @@ export const concoctBoilerplate = <
             result,
           },
         });
-      } catch (error) {
+      } catch (error: unknown) {
         yield* put<Action<Error>>({
           type: actionTypes[k][2],
           payload: {
@@ -212,9 +212,9 @@ export const concoctBoilerplate = <
         saga,
       ],
     };
-    // TODO get rid of this cast
   }, {}) as SagaActionsRecord<A, B, Error>;
 
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const rootReducer = keys.reduce(
     (acc, k) => ({
       ...acc,
