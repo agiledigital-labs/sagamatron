@@ -43,7 +43,7 @@
     "typescript": "^4.0.2"
   },
   "typeCoverage": {
-    "atLeast": 99.54
+    "atLeast": 99.39
   },
   "dependencies": {
     "flux-standard-action": "^2.1.1",
