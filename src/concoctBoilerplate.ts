@@ -154,6 +154,8 @@ export const concoctBoilerplate = <
               action.payload !== undefined ? action.payload.error : undefined,
           };
         default:
+          // TODO can we just return state?
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           return state !== undefined ? state : defaultState;
       }
     };
@@ -176,8 +178,8 @@ export const concoctBoilerplate = <
           type: actionTypes[k][2],
           payload: {
             // TODO fix this
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            error,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/consistent-type-assertions
+            error: error as Error,
           },
         });
       }
