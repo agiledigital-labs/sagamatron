@@ -2195,9 +2195,9 @@ domexception@^2.0.1:
     webidl-conversions "^5.0.0"
 
 dot-prop@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-5.2.0.tgz#c34ecc29556dc45f1f4c22697b6f4904e0cc4fcb"
-  integrity sha512-uEUyaDKoSQ1M4Oq8l45hSE26SnTxL6snNnqvK/VWx5wJhmff5z0FUVJDKDanor/6w3kzE3i7XZOk+7wC0EXr1A==
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-5.3.0.tgz#90ccce708cd9cd82cc4dc8c3ddd9abdd55b20e88"
+  integrity sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==
   dependencies:
     is-obj "^2.0.0"
 
@@ -2360,10 +2360,10 @@ eslint-config-prettier@^6.11.0:
   dependencies:
     get-stdin "^6.0.0"
 
-eslint-config-typed-fp@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-typed-fp/-/eslint-config-typed-fp-0.4.0.tgz#e13b849b702fe8104f4e1d6d8571bd0cdea59e04"
-  integrity sha512-0EFOlWG7HkcDNmCT61T6t+BMlinw3kQlH/ta+1j7TnCeN+id3id7P1FY6Y9FG3QbEuHfpPAooWLMC0O9sXwr5g==
+eslint-config-typed-fp@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-typed-fp/-/eslint-config-typed-fp-0.8.0.tgz#ceef893fc6d8e1512c6a9bb31c020e1390fd934e"
+  integrity sha512-ugNOBb+wYU8Ite3P1Rkaxvj3zT1k17dRMKtSo2Dw4+JgN2ydk+HmVcQ1Vo/dQ+f5q+S+WJwgRf//J+YIZsVEtA==
 
 eslint-plugin-functional@^3.0.2:
   version "3.0.2"
@@ -2395,10 +2395,10 @@ eslint-plugin-sonarjs@^0.5.0:
   resolved "https://registry.yarnpkg.com/eslint-plugin-sonarjs/-/eslint-plugin-sonarjs-0.5.0.tgz#ce17b2daba65a874c2862213a9e38e8986ad7d7d"
   integrity sha512-XW5MnzlRjhXpIdbULC/qAdJYHWw3rRLws/DyawdlPU/IdVr9AmRK1r2LaCvabwKOAW2XYYSo3kDX58E4MrB7PQ==
 
-eslint-plugin-total-functions@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-total-functions/-/eslint-plugin-total-functions-3.0.0.tgz#504becb2f29c0f0625c8d5bfde0c4e01e0ac66f3"
-  integrity sha512-rc/QrArdwLtf46dlbIvt+iisDSd6d+p0dSsCHyCrmPujKodP8+12Jx7e2/fdHGXkBlLvWxOej0evaovhzRXOKA==
+eslint-plugin-total-functions@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-total-functions/-/eslint-plugin-total-functions-3.1.0.tgz#194cd0927791c5737b4831470ebbc6a99a14e86f"
+  integrity sha512-70GQ3kh3lybwFr9+HFGQxdOZYYA9Ha6rjxUkF8hZXIVcX71a5m4gm3gZC8CFZnXPP3ZJWMAs2g04GRgu7fDFPA==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^4.0.1"
     "@typescript-eslint/experimental-utils" "^4.0.1"
@@ -5476,9 +5476,9 @@ run-parallel@^1.1.9:
   integrity sha512-DEqnSRTDw/Tc3FXf49zedI638Z9onwUotBMiUFKmrO2sdFKIbXamXGQ3Axd4qgphxKB4kw/qP1w5kTxnfU1B9Q==
 
 rxjs@^6.4.0:
-  version "6.6.2"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.6.2.tgz#8096a7ac03f2cc4fe5860ef6e572810d9e01c0d2"
-  integrity sha512-BHdBMVoWC2sL26w//BCu3YzKT4s2jip/WhwsGEDmeKYBhKDZeYezVUnHatYB7L85v5xs0BAQmg6BEYJEKxBabg==
+  version "6.6.3"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.6.3.tgz#8ca84635c4daa900c0d3967a6ee7ac60271ee552"
+  integrity sha512-trsQc+xYYXZ3urjOiJOuCOa5N3jAZ3eiSpQB5hIT8zGlL2QfnHLJ2r7GMkBGuIausdJN1OneaI6gQlsqNHHmZQ==
   dependencies:
     tslib "^1.9.0"
 
@@ -6884,9 +6884,9 @@ whatwg-mimetype@^2.3.0:
   integrity sha512-M4yMwr6mAnQz76TbJm914+gPpB/nCwvZbJU28cUD6dR004SAxDLOOSUaB1JDRqLtaOV/vi0IC5lEAGFgrjGv/g==
 
 whatwg-url@^8.0.0:
-  version "8.2.1"
-  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-8.2.1.tgz#ed73417230784b281fb2a32c3c501738b46167c3"
-  integrity sha512-ZmVCr6nfBeaMxEHALLEGy0LszYjpJqf6PVNQUQ1qd9Et+q7Jpygd4rGGDXgHjD8e99yLFseD69msHDM4YwPZ4A==
+  version "8.2.2"
+  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-8.2.2.tgz#85e7f9795108b53d554cec640b2e8aee2a0d4bfd"
+  integrity sha512-PcVnO6NiewhkmzV0qn7A+UZ9Xx4maNTI+O+TShmfE4pqjoCMwUMjkvoNhNHPTvgR7QH9Xt3R13iHuWy2sToFxQ==
   dependencies:
     lodash.sortby "^4.7.0"
     tr46 "^2.0.2"
