@@ -40,7 +40,7 @@
     "redux-saga": "^1.1.1",
     "ts-jest": "^26.3.0",
     "type-coverage": "^2.13.0",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.3"
   },
   "typeCoverage": {
     "atLeast": 99.39
