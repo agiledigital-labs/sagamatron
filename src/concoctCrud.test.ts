@@ -63,7 +63,7 @@ it("concocts CRUD boilerplate", async () => {
       deleted: { loading: false },
     },
     // TODO fix this
-    // eslint-disable-next-line total-functions/no-unsafe-assignment
+    // eslint-disable-next-line total-functions/no-unsafe-readonly-mutable-assignment
     getUserSuccess({ id: "5678", username: "anotheruser" })
   );
 

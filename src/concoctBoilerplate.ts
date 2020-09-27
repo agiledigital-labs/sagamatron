@@ -117,6 +117,7 @@ export const concoctBoilerplate = <
   sideEffects: A,
   actionTypes: B
 ): SagaBoilerplate<A, B, ReadonlyRecord<string, State<Error>>, Error> => {
+  // eslint-disable-next-line total-functions/no-unsafe-readonly-mutable-assignment
   const keys: ReadonlyArray<string> = Object.keys(sideEffects);
 
   const defaultState: State<Error> = {
