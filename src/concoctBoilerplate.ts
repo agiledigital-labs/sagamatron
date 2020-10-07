@@ -5,9 +5,6 @@
 /* eslint-disable functional/no-expression-statement */
 /* eslint-disable functional/functional-parameters */
 
-// TODO fix these and re-enable rule.
-/* eslint-disable total-functions/no-unsafe-subscript */
-
 import { FluxStandardAction } from "flux-standard-action";
 import { Reducer, ReducersMapObject } from "redux";
 import { all, call, SagaGenerator, takeLatest, put } from "typed-redux-saga";
@@ -133,12 +130,12 @@ export const concoctBoilerplate = <
       action: Action<Error>
     ): State<Error> => {
       switch (action.type) {
-        case actionTypes[k][0]:
+        case actionTypes[k]![0]:
           return {
             ...state,
             loading: true,
           };
-        case actionTypes[k][1]:
+        case actionTypes[k]![1]:
           return {
             ...state,
             loading: false,
@@ -146,7 +143,7 @@ export const concoctBoilerplate = <
               action.payload !== undefined ? action.payload.result : undefined,
             error: undefined,
           };
-        case actionTypes[k][2]:
+        case actionTypes[k]![2]:
           return {
             ...state,
             loading: false,
@@ -166,17 +163,17 @@ export const concoctBoilerplate = <
     ): SagaGenerator<void> {
       try {
         // TODO: https://github.com/agiledigital/typed-redux-saga
-        const result = yield* call(sideEffects[k], ...action.payload.params);
+        const result = yield* call(sideEffects[k]!, ...action.payload.params);
 
         yield* put<Action<Error>>({
-          type: actionTypes[k][1],
+          type: actionTypes[k]![1],
           payload: {
             result,
           },
         });
       } catch (error: unknown) {
         yield* put<Action<Error>>({
-          type: actionTypes[k][2],
+          type: actionTypes[k]![2],
           payload: {
             // TODO fix this
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/consistent-type-assertions
@@ -191,21 +188,21 @@ export const concoctBoilerplate = <
       [k]: [
         // PERFORM SIDE EFFECT (e.g. GET)
         (...params: Parameters<A[typeof k]>) => ({
-          type: actionTypes[k][0],
+          type: actionTypes[k]![0],
           payload: {
             params,
           },
         }),
         // PERFORM SIDE EFFECT SUCCESS (e.g. GET SUCCESS)
         (result: ExtractResult<A[typeof k]>) => ({
-          type: actionTypes[k][1],
+          type: actionTypes[k]![1],
           payload: {
             result,
           },
         }),
         // PERFORM SIDE EFFECT FAILURE (e.g. GET FAILURE)
         (error: unknown) => ({
-          type: actionTypes[k][2],
+          type: actionTypes[k]![2],
           payload: {
             error,
           },
@@ -221,13 +218,13 @@ export const concoctBoilerplate = <
   const rootReducer = keys.reduce(
     (acc, k) => ({
       ...acc,
-      [actionTypes[k][3]]: actions[k][3],
+      [actionTypes[k]![3]]: actions[k]![3],
     }),
     {}
   ) as ReducersMapObject<ReadonlyRecord<string, State<Error>>>;
 
   function* rootSaga(): SagaGenerator<void> {
-    yield* all(keys.map((k) => takeLatest(actionTypes[k][0], actions[k][4])));
+    yield* all(keys.map((k) => takeLatest(actionTypes[k]![0], actions[k]![4])));
   }
 
   return {
