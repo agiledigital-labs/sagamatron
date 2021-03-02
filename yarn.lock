@@ -951,7 +951,7 @@
     semver "^7.3.2"
     tsutils "^3.17.1"
 
-"@typescript-eslint/experimental-utils@4.16.0", "@typescript-eslint/experimental-utils@^4.0.1", "@typescript-eslint/experimental-utils@^4.15.1", "@typescript-eslint/experimental-utils@^4.8.2", "@typescript-eslint/experimental-utils@^4.9.1":
+"@typescript-eslint/experimental-utils@4.16.0":
   version "4.16.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-4.16.0.tgz#2a7cd270ee753a03ebcc9578130facf3e3916865"
   integrity sha512-4mXOw/VHPVybKe7FfI+ROvHDALy3pn9ASft3GwTYuRw27XggNriNoJ1ZNL6x2JSYpeLjHP0y9SoTmM6CXDAq+g==
@@ -960,6 +960,18 @@
     "@typescript-eslint/scope-manager" "4.16.0"
     "@typescript-eslint/types" "4.16.0"
     "@typescript-eslint/typescript-estree" "4.16.0"
+    eslint-scope "^5.0.0"
+    eslint-utils "^2.0.0"
+
+"@typescript-eslint/experimental-utils@^4.0.1", "@typescript-eslint/experimental-utils@^4.16.1", "@typescript-eslint/experimental-utils@^4.8.2", "@typescript-eslint/experimental-utils@^4.9.1":
+  version "4.16.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-4.16.1.tgz#da7a396dc7d0e01922acf102b76efff17320b328"
+  integrity sha512-0Hm3LSlMYFK17jO4iY3un1Ve9x1zLNn4EM50Lia+0EV99NdbK+cn0er7HC7IvBA23mBg3P+8dUkMXy4leL33UQ==
+  dependencies:
+    "@types/json-schema" "^7.0.3"
+    "@typescript-eslint/scope-manager" "4.16.1"
+    "@typescript-eslint/types" "4.16.1"
+    "@typescript-eslint/typescript-estree" "4.16.1"
     eslint-scope "^5.0.0"
     eslint-utils "^2.0.0"
 
