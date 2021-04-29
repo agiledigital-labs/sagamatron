@@ -1,0 +1,78 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "19:00"
+  open-pull-requests-limit: 10
+  versioning-strategy: increase
+  ignore:
+  - dependency-name: snyk
+    versions:
+    - 1.440.1
+    - 1.440.4
+    - 1.440.5
+    - 1.444.0
+    - 1.446.0
+    - 1.447.0
+    - 1.448.0
+    - 1.449.0
+    - 1.452.0
+    - 1.454.0
+    - 1.455.0
+    - 1.456.0
+    - 1.457.0
+    - 1.458.0
+    - 1.459.0
+    - 1.460.0
+    - 1.461.0
+    - 1.464.0
+    - 1.466.0
+    - 1.467.0
+    - 1.471.0
+    - 1.473.0
+    - 1.476.0
+    - 1.478.0
+    - 1.483.0
+    - 1.485.0
+    - 1.488.0
+    - 1.491.0
+    - 1.495.0
+    - 1.500.0
+    - 1.502.0
+    - 1.505.0
+    - 1.509.0
+    - 1.511.0
+    - 1.517.0
+    - 1.520.0
+    - 1.521.0
+    - 1.522.0
+    - 1.526.0
+    - 1.528.0
+    - 1.529.0
+    - 1.530.0
+    - 1.532.0
+    - 1.538.0
+    - 1.541.0
+    - 1.563.0
+    - 1.566.0
+    - 1.570.0
+  - dependency-name: eslint-config-prettier
+    versions:
+    - 8.0.0
+    - 8.1.0
+    - 8.2.0
+  - dependency-name: "@typescript-eslint/experimental-utils"
+    versions:
+    - 4.15.0
+    - 4.15.2
+    - 4.16.0
+    - 4.17.0
+    - 4.18.0
+    - 4.19.0
+    - 4.21.0
+    - 4.22.0
+  - dependency-name: type-coverage
+    versions:
+    - 2.17.1
